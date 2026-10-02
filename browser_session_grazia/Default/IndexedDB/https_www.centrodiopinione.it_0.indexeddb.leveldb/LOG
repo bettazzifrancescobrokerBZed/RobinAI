@@ -1,0 +1,14 @@
+2026/10/01-16:21:45.082 6fc7 Reusing MANIFEST /home/bettazzi/PROGETTI di Settembre 2026/CENTROdiOPINIONE/browser_session_grazia/Default/IndexedDB/https_www.centrodiopinione.it_0.indexeddb.leveldb/MANIFEST-000001
+2026/10/01-16:21:45.082 6fc7 Recovering log #14
+2026/10/01-16:21:45.082 6fc7 Reusing old log /home/bettazzi/PROGETTI di Settembre 2026/CENTROdiOPINIONE/browser_session_grazia/Default/IndexedDB/https_www.centrodiopinione.it_0.indexeddb.leveldb/000014.log 
+2026/10/01-16:21:45.083 6fc7 Delete type=2 #12
+2026/10/01-16:21:45.190 6fd8 Level-0 table #19: started
+2026/10/01-16:21:45.193 6fd8 Level-0 table #19: 662 bytes OK
+2026/10/01-16:21:45.196 6fd8 Delete type=0 #14
+2026/10/01-16:21:45.200 6fc7 Manual compaction at level-0 from '\x00\x07\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at '\x00\x07\x00\x00\x05' @ 175 : 1
+2026/10/01-16:21:45.200 6fc7 Compacting 1@0 + 1@1 files
+2026/10/01-16:21:45.203 6fc7 Generated table #20@0: 63 keys, 1356 bytes
+2026/10/01-16:21:45.203 6fc7 Compacted 1@0 + 1@1 files => 1356 bytes
+2026/10/01-16:21:45.209 6fc7 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/10/01-16:21:45.210 6fc7 Delete type=2 #19
+2026/10/01-16:21:45.210 6fc7 Manual compaction at level-0 from '\x00\x07\x00\x00\x05' @ 175 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at (end)

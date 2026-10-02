@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=GIN Sondaggi
+Comment=Avvia l'automazione GIN
+Exec=/home/bettazzi/PROGETTI\ di\ Settembre\ 2026/CENTROdiOPINIONE/.venv/bin/python /home/bettazzi/PROGETTI\ di\ Settembre\ 2026/CENTROdiOPINIONE/opinioneAI.GRAZIApy
+Icon=utilities-terminal
+Terminal=true
+Categories=Utility;

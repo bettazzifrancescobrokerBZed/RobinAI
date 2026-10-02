@@ -1,0 +1,30 @@
+[
+    {
+        "id": "task_email_reale_01",
+        "modulo": "scanner_email_reale",
+        "parametri": {
+            "imap_server": "imap.gmail.com",
+            "email_user": "grazialatri@gmail.com",
+            "email_pass": "ibpztraxvfwemagk",
+            "filtro mittente": "centro di opinione",
+            "filtro oggetto": "La tua opinione paga, Francesco"
+        }
+    },
+    {
+        "id": "task_flusso_continuo_01",
+        "modulo": "flusso_continuo_browser",
+        "parametri": {
+            "headless": false,
+            "url_login": "https://www.centrodiopinione.it/login",
+            "sito_user": "grazialatri@gmail.com",
+            "sito_pass": "03081971Gf@"
+        }
+    },
+    {
+        "id": "task_report_01",
+        "modulo": "generatore_report",
+        "parametri": {
+            "output_file": "report_giornaliero_centro.json"
+        }
+    }
+]
