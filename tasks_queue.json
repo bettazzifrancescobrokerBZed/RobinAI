@@ -4,10 +4,10 @@
         "modulo": "scanner_email_reale",
         "parametri": {
             "imap_server": "imap.gmail.com",
-            "email_user": "grazialatri@gmail.com",
-            "email_pass": "ibpztraxvfwemagk",
-            "filtro mittente": "centro di opinione",
-            "filtro oggetto": "La tua opinione paga, Francesco"
+            "email_user": "bettazzifg@gmail.com",
+            "email_pass": "gkhigbqozopjudlo",
+            "filtro mittente": "Centro di Opinione",
+            "filtro oggetto": ""
         }
     },
     {
@@ -16,15 +16,153 @@
         "parametri": {
             "headless": false,
             "url_login": "https://www.centrodiopinione.it/login",
-            "sito_user": "grazialatri@gmail.com",
-            "sito_pass": "03081971Gf@"
-        }
-    },
-    {
-        "id": "task_report_01",
-        "modulo": "generatore_report",
-        "parametri": {
-            "output_file": "report_giornaliero_centro.json"
+            "sito_user": "bettazzifg@gmail.com",
+            "sito_pass": "08081973Gf@",
+            "profilo_demografico": {
+                "account": "Bettazzifg@gmail.com",
+                "anagrafica": {
+                    "sesso": "Uomo",
+                    "eta": 53,
+                    "anno_nascita": 1973,
+                    "occupazione": "Lavoratore autonomo / Imprenditore / Professionista",
+                    "istruzione": "Diploma / Università",
+                    "stato_civile": "Coniugato / Coabitante",
+                    "area_geografica": "Nord Italia"
+                },
+                "mobilita_e_patenti": {
+                    "patente_auto": "Sì",
+                    "patente_moto": "Sì",
+                    "possesso_auto": "Sì",
+                    "proprietario_veicolo": "Sì",
+                    "utilizzo_auto_principale": "Quotidianamente"
+                },
+                "tecnologia_e_consumi": {
+                    "dispositivi_posseduti": [
+                        "Smartphone",
+                        "PC Portatile",
+                        "Smart TV"
+                    ],
+                    "decisioni_acquisto": "Autonomo / In comune",
+                    "animali_domestici": [
+                        "Sì (Gatti)"
+                    ]
+                }
+            },
+            "profilo_intelligente": {
+                "genere": "Maschio",
+                "sesso": "Uomo",
+                "eta": 53,
+                "anno_nascita": 1973,
+                "mese_nascita": 8,
+                "giorno_nascita": 8,
+                "data_nascita": "08/08/1973",
+                "stato_civile": "Sposato",
+                "coniugato": true,
+                "figli": 0,
+                "figli_minorenni": 0,
+                "lingua_madre": "Italiano",
+                "nazione": "Italia",
+                "regione": "Emilia-Romagna",
+                "provincia": "Parma",
+                "citta": "Berceto",
+                "tipo_comune": "Piccolo comune rurale montano",
+                "area_geografica": "Nord Italia",
+                "zona": "Montagna Appenninica",
+                "altitudine": "Alta (>600m)",
+                "cap": "43042",
+                "stato_occupazionale": "Lavoratore autonomo",
+                "occupazione": "Libero professionista",
+                "settore": "Media, Fotografia, Video e Informatica",
+                "ruolo": "Titolare/Freelance",
+                "settore_dettaglio": "Produzione video, fotografia professionale, sviluppo software",
+                "decisore_acquisti_aziendali": true,
+                "dipendenti": 0,
+                "partita_iva": true,
+                "anni_esperienza": 25,
+                "reddito_familiare_annuo": "30.000-50.000€",
+                "fascia_reddito": "Media",
+                "titolo_studio": "Diploma di Scuola Superiore",
+                "livello_istruzione": "Diploma",
+                "istruzione_universitaria": false,
+                "formazione_continua": true,
+                "autodidatta": true,
+                "tipo_abitazione": "Casa indipendente con giardino",
+                "proprieta_casa": "Di proprietà",
+                "mutuo_attivo": false,
+                "mq_abitazione": "100-150",
+                "componenti_nucleo": 2,
+                "animali_domestici": [
+                    "Gatti"
+                ],
+                "numero_gatti": 2,
+                "giardino": true,
+                "orto": true,
+                "dispositivi": [
+                    "PC Portatile Linux",
+                    "Smartphone Android"
+                ],
+                "sistema_operativo_pc": "Linux",
+                "sistema_operativo_mobile": "Android",
+                "connessione_internet": "Fibra/FWA",
+                "velocita_internet": "30-100 Mbps",
+                "servizi_streaming": [
+                    "YouTube"
+                ],
+                "cloud_storage": true,
+                "competenze_informatiche": "Avanzate",
+                "patente_auto": true,
+                "patente_moto": true,
+                "possesso_auto": true,
+                "possesso_moto": true,
+                "numero_auto": 1,
+                "numero_moto": 1,
+                "alimentazione_auto": "Benzina",
+                "alimentazione_moto": "Benzina",
+                "km_annui_auto": "10.000-15.000",
+                "uso_auto": "Quotidiano",
+                "uso_mezzi_pubblici": false,
+                "responsabile_spesa": "Condiviso",
+                "frequenza_spesa_online": "1-3 volte/mese",
+                "hobby": [
+                    "Fotografia",
+                    "Programmazione",
+                    "Natura",
+                    "Video editing",
+                    "Trekking"
+                ],
+                "sport_praticati": [
+                    "Trekking",
+                    "Passeggiate"
+                ],
+                "fumatore": false,
+                "consumo_alcol": "Occasionale/Moderato",
+                "dieta": "Onnivora",
+                "problemi_salute_cronici": false,
+                "allergie": false,
+                "occhiali_lenti": false,
+                "attivita_fisica": "Regolare",
+                "conto_corrente": true,
+                "carta_credito": true,
+                "investimenti": false,
+                "assicurazioni": [
+                    "Auto",
+                    "Moto",
+                    "Casa"
+                ],
+                "risparmio": "Moderato",
+                "_personalita": {
+                    "sensibilita_ambientale": 8,
+                    "apertura_tecnologica": 9,
+                    "indipendenza": 9,
+                    "pragmatismo": 8,
+                    "creativita": 8,
+                    "tradizionalismo": 4,
+                    "orientamento_privacy": 9,
+                    "orientamento_sociale": 6,
+                    "propensione_rischio": 5,
+                    "sensibilita_economica": 7
+                }
+            }
         }
     }
 ]

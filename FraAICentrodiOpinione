@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Avvia Roobin Sondaggi
+Comment=Avvia l'automazione di Roobin per Centro di Opinione
+Exec=/bin/bash -c 'cd "/home/bettazzi/PROGETTI di Settembre 2026/CENTROdiOPINIONE DA OTTIMIZZARE/" && "/home/bettazzi/PROGETTI di OTTOBRE 2026/LIFE POINT/venv/bin/python3" -u FraIA.py; exec bash'
+Icon=utilities-terminal
+Terminal=true
+Categories=Application;

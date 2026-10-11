@@ -13,9 +13,9 @@ from playwright.sync_api import sync_playwright, Page, TimeoutError as Playwrigh
 
 # ==========================================
 # STROFA 1: BASE MADRE BLINDATA E STRUTTURA CORE
-# Data: 29-09-2026
+# Data: 06-10-2026
 # Riferimento: Congegno base con Pattern Registry/Camme, 
-# Scanner IMAP reale, Playwright per Login e Pop-up
+# Scanner IMAP reale, Playwright per Login e Gestione Bacheca
 # ==========================================
 
 # 0. CONFIGURAZIONE DEL LOGGING
@@ -28,18 +28,18 @@ logger = logging.getLogger("RoobinAutomationCore")
 
 
 # ==========================================
-# STROFA 1 BIS: MODULO PROFILO DEMOGRAFICO E MEMORIA SONDAGGISTA (ROBIN)
-# Data: 02-10-2026
-# Riferimento: Dati base standardizzati di Francesco Bettazzi per il superamento
-# dei filtri preliminari (screener) dei sondaggi da parte di Robin.
+# STROFA 1 BIS: PROFILO DEMOGRAFICO E MEMORIA SONDAGGISTA (ROBIN)
+# Data: 06-10-2026
+# Riferimento: Profilo strutturato di Maragrazia Triscornia per il superamento automatico 
+# dei filtri preliminari (screener) all'interno dei sondaggi.
 # ==========================================
 
 PROFILO_SONDAGGISTA_ROBIN = {
-    "account": "Bettazzifg@gmail.com",
+    "account": "grazialatri@gmail.com",
     "anagrafica": {
-        "sesso": "Uomo",
-        "eta": 53,
-        "anno_nascita": 1973,
+        "sesso": "Donna",
+        "eta": 55,
+        "anno_nascita": 1971,
         "occupazione": "Lavoratore autonomo / Imprenditore / Professionista",
         "istruzione": "Diploma / Università",
         "stato_civile": "Coniugato / Coabitante",
@@ -60,7 +60,10 @@ PROFILO_SONDAGGISTA_ROBIN = {
 }
 
 
+# ==========================================
+# STROFA 1 TER: IL MOTORE DETERMINISTICO (REGISTRO CAMME E CORE)
 # 1. IL MOTORE DETERMINISTICO (Il Cilindro)
+# ==========================================
 
 class CammaIntercambiabile(ABC):
     @abstractmethod
@@ -87,7 +90,6 @@ class AutomationCore:
         self.inizializza_coda_default()
 
     def inizializza_coda_default(self):
-        # Salva o aggiorna il profilo di memoria locale di Robin
         profilo_file = "memoria_profilo_sondaggi.json"
         if not os.path.exists(profilo_file):
             with open(profilo_file, "w", encoding="utf-8") as f:
@@ -101,8 +103,8 @@ class AutomationCore:
                     "modulo": "scanner_email_reale",
                     "parametri": {
                         "imap_server": "imap.gmail.com",
-                        "email_user": "Bettazzifg@gmail.com",
-                        "email_pass": "bowvgphnrrkfogmi",
+                        "email_user": "grazialatri@gmail.com",
+                        "email_pass": "ibpztraxvfwemagk",
                         "filtro mittente": "centro di opinione",
                         "filtro oggetto": "La tua opinione paga, Francesco"
                     }
@@ -112,9 +114,9 @@ class AutomationCore:
                     "modulo": "flusso_continuo_browser",
                     "parametri": {
                         "headless": False,
-                        "url_login": "https://www.centrodeopinione.it/login",
-                        "sito_user": "Bettazzifg@gmail.com",
-                        "sito_pass": "08081973Gf@",
+                        "url_login": "https://www.centrodiopinione.it/login",
+                        "sito_user": "grazialatri@gmail.com",
+                        "sito_pass": "03081971Gf@",
                         "profilo_demografico": PROFILO_SONDAGGISTA_ROBIN
                     }
                 },
@@ -169,9 +171,6 @@ class AutomationCore:
 
 # ==========================================
 # STROFA 2: MODULO SCANNER IMAP MIRATO (ROOBIN)
-# Data: 29-09-2026
-# Riferimento: Scansione posta elettronica con supporto
-# al nuovo oggetto e mittente mirato di Centro di Opinione
 # ==========================================
 
 class CammaScannerEmailReale(CammaIntercambiabile):
@@ -277,14 +276,12 @@ class CammaScannerEmailReale(CammaIntercambiabile):
 
 # ==========================================
 # STROFA 3: ESECUTORE DI SONDAGGI TOTALMENTE AUTONOMO (ROOBIN CLONE)
-# Data: 29-09-2026
-# Riferimento: Automazione Playwright con loop iterativo avanzato 
-# per la navigazione, risposta e completamento autonomo del sondaggio
+# Aggiornato con controllo reale della bacheca e gestione sondaggi attivi
 # ==========================================
 
 class CammaFlussoContinuoBrowser(CammaIntercambiabile):
     def esegui(self, contesto: Dict[str, Any]) -> Dict[str, Any]:
-        url_login = contesto.get("url_login", "https://www.centrodeopinione.it/login")
+        url_login = contesto.get("url_login", "https://www.centrodiopinione.it/login")
         link_estratto = contesto.get("link_estratto")
         headless_mode = contesto.get("headless", False)
         sito_user = contesto.get("sito_user")
@@ -313,54 +310,61 @@ class CammaFlussoContinuoBrowser(CammaIntercambiabile):
             context.on("page", gestisci_nuova_scheda)
 
             try:
-                target_url = url_login
-                if link_estratto and link_estratto != "Nessun link trovato":
-                    target_url = link_estratto
-
+                # 1. Navigazione iniziale al link estratto o fallback
+                target_url = link_estratto if (link_estratto and link_estratto != "Nessun link trovato") else url_login
+                logger.info(f"Roobin - Navigazione iniziale verso: {target_url}")
                 page.goto(target_url, timeout=45000)
                 page.wait_for_load_state("domcontentloaded")
 
                 # Consenso cookie
                 try:
                     consenso_btn = page.locator("button:has-text('Dai il consenso e accedi al sito'), button:has-text('Accetta'), button#onetrust-accept-btn-handler").first
-                    if consenso_btn.is_visible(timeout=5000):
+                    if consenso_btn.is_visible(timeout=4000):
                         consenso_btn.click()
                         page.wait_for_timeout(1500)
                 except Exception:
                     pass
 
-                try:
-                    login_link = page.locator("a:has-text('Accedi'), a[href*='login']").first
-                    if login_link.is_visible(timeout=3000):
-                        login_link.click()
+                # 2. VERIFICA E FORZATURA LOGIN: Se siamo sulla landing page pubblica, eseguiamo il login con credenziali
+                accedi_btn = page.locator("a:has-text('ACCEDI'), button:has-text('ACCEDI'), a[href*='login']").first
+                if accedi_btn.is_visible(timeout=4000) or "login" not in page.url:
+                    logger.info("Roobin - Rilevata pagina pubblica/landing. Procedo al login esplicito con credenziali...")
+                    try:
+                        if accedi_btn.is_visible(timeout=2000):
+                            accedi_btn.click()
+                            page.wait_for_load_state("domcontentloaded")
+                    except Exception:
+                        pass
+                    
+                    if "login" not in page.url:
+                        page.goto(url_login, timeout=30000)
                         page.wait_for_load_state("domcontentloaded")
-                except Exception:
-                    pass
 
-                if "login" not in page.url and page.locator("input[type='email'], input#email").count() == 0:
-                    page.goto(url_login, timeout=45000)
-                    page.wait_for_load_state("domcontentloaded")
+                    # Inserimento Email
+                    email_input = page.locator("input[type='email'], input#email, input[name*='email'], input#identifierId").first
+                    email_input.wait_for(state="visible", timeout=15000)
+                    email_input.click()
+                    email_input.fill(sito_user)
 
-                # Inserimento credenziali
-                email_input = page.locator("input[type='email'], input#email, input[name*='email'], input#identifierId").first
-                email_input.wait_for(state="visible", timeout=20000)
-                email_input.click()
-                email_input.fill(sito_user)
+                    # Inserimento Password
+                    pass_input = page.locator("input[type='password'], input#password, input[name*='password']").first
+                    pass_input.wait_for(state="visible", timeout=15000)
+                    pass_input.click()
+                    pass_input.fill(sito_pass)
 
-                pass_input = page.locator("input[type='password'], input#password, input[name*='password']").first
-                pass_input.wait_for(state="visible", timeout=20000)
-                pass_input.click()
-                pass_input.fill(sito_pass)
+                    # Invio form di login
+                    submit_btn = page.locator("button:has-text('Accedi'), input[type='submit'], button[type='submit'], button:has-text('Login')").first
+                    submit_btn.click()
 
-                submit_btn = page.locator("button:has-text('Accedi'), input[type='submit'], button[type='submit'], span:has-text('Avanti')").first
-                submit_btn.click()
+                    page.wait_for_load_state("networkidle", timeout=25000)
+                    page.wait_for_timeout(4000)
+                    logger.info(f"Roobin - Credenziali inviate. URL corrente: {page.url}")
+                else:
+                    logger.info("Roobin - Sessione autenticata attiva o accesso diretto riuscito.")
 
-                page.wait_for_load_state("networkidle", timeout=25000)
-                page.wait_for_timeout(4000)
-
-                # Pulizia pop-up
-                logger.info("Roobin - Pulizia aggressiva pop-up di notifica...")
-                page.wait_for_timeout(3000)
+                # 3. Pulizia pop-up e notifiche
+                logger.info("Roobin - Pulizia pop-up e notifiche...")
+                page.wait_for_timeout(2000)
 
                 for _ in range(3):
                     try:
@@ -387,60 +391,72 @@ class CammaFlussoContinuoBrowser(CammaIntercambiabile):
                     except Exception:
                         pass
 
-                # Scansione bacheca e avvio sondaggio
-                logger.info("Roobin - Scansione bacheca e apertura sondaggio...")
-                page.wait_for_timeout(2000)
+                # 4. SCANSIONE INTELLIGENTE BACHECA E RILEVAMENTO SONDAGGI DISPONIBILI
+                logger.info("Roobin - Scansione bacheca per sondaggi attivi...")
+                page.wait_for_timeout(3000)
                 
-                sondaggio_avviato = False
                 url_finale = page.url
                 titolo_pagina = "Bacheca | Dashboard"
                 pagina_attiva = page
+                sondaggio_avviato = False
 
                 try:
                     titolo_pagina = page.title()
                 except Exception:
                     pass
 
-                candidati = page.locator("button:has-text('Partecipa'), a:has-text('Partecipa'), button:has-text('Inizia'), a:has-text('Inizia'), .survey-item, tr").filter(has_text=re.compile(r"(sondaggio|survey|punti)", re.IGNORECASE))
-                
-                if candidati.count() > 0:
-                    try:
-                        obiettivo = candidati.first
-                        obiettivo.scroll_into_view_if_needed()
-                        
+                # Verifichiamo se la bacheca indica esplicitamente che non ci sono sondaggi
+                testo_corrente_pagina = page.locator("body").inner_text().lower()
+                if "nessun sondaggio disponibile" in testo_corrente_pagina:
+                    logger.info("Roobin [ROBIN] - La bacheca indica: 'Nessun sondaggio disponibile'. Sessione completata senza azioni pendenti.")
+                    memoria_sondaggio = [{
+                        "step": 0,
+                        "domanda": "Verifica bacheca",
+                        "esito_risposta": "Nessun sondaggio attivo trovato in bacheca al momento",
+                        "timestamp_step": datetime.now().strftime("%H:%M:%S")
+                    }]
+                else:
+                    # Cerchiamo pulsanti di partecipazione effettivi (escludendo banner pubblicitari generici)
+                    candidati = page.locator("a.survey-link, button.survey-btn, tr.survey-row, a:has-text('Partecipa'), button:has-text('Partecipa'), a:has-text('Inizia'), button:has-text('Inizia')").all()
+                    candidati_validi = [c for c in candidati if c.is_visible()]
+
+                    if len(candidati_validi) > 0:
+                        logger.info(f> "Roobin [ROBIN] - Trovati {len(candidati_validi)} sondaggi attivi in bacheca. Avvio interazione...")
                         try:
-                            with context.expect_page(timeout=6000) as nuovo_evento:
-                                obiettivo.click()
-                            pagina_attiva = nuovo_evento.value
-                            pagina_attiva.wait_for_load_state("domcontentloaded", timeout=10000)
-                            url_finale = pagina_attiva.url
-                            titolo_pagina = pagina_attiva.title()
-                            sondaggio_avviato = True
-                        except Exception:
-                            obiettivo.click()
-                            page.wait_for_timeout(4000)
+                            obiettivo = candidati_validi[0]
+                            obiettivo.scroll_into_view_if_needed()
+                            
                             try:
+                                with context.expect_page(timeout=6000) as nuovo_evento:
+                                    obiettivo.click()
+                                pagina_attiva = nuovo_evento.value
+                                pagina_attiva.wait_for_load_state("domcontentloaded", timeout=10000)
+                                url_finale = pagina_attiva.url
+                                titolo_pagina = pagina_attiva.title()
+                            except Exception:
+                                obiettivo.click()
+                                page.wait_for_timeout(4000)
                                 url_finale = page.url
                                 titolo_pagina = page.title()
-                            except Exception:
-                                pass
+                            
                             sondaggio_avviato = True
-                    except Exception as e_click:
-                        logger.warning(f"Roobin - Impossibile interagire con il sondaggio: {e_click}")
+                        except Exception as e_click:
+                            logger.warning(f"Roobin [ROBIN] - Impossibile cliccare sul sondaggio individuato: {e_click}")
+                            memoria_sondaggio = []
+                    else:
+                        logger.info("Roobin [ROBIN] - Nessun pulsante di sondaggio valido rilevato nella schermata.")
+                        memoria_sondaggio = []
 
-                # =========================================================================
-                # ESECUZIONE AUTONOMA ITERATIVA DEL SONDAGGIO (LOOP COMPLETO FINO ALLA FINE)
-                # =========================================================================
-                memoria_sondaggio = []
+                # 5. ESECUZIONE AUTONOMA ITERATIVA DEL SONDAGGIO (SE AVVIATO)
                 if sondaggio_avviato:
                     logger.info("Roobin [ROBIN] - Attivazione loop di compilazione autonoma integrale con profilo...")
                     max_step = 60  
+                    memoria_sondaggio = []
                     
                     for step in range(1, max_step + 1):
                         try:
                             pagina_attiva.wait_for_timeout(3000)
-                            url_corrente = pagina_attiva.url
-
+                            
                             try:
                                 testo_pagina = pagina_attiva.inner_text("body").lower()
                             except Exception:
@@ -467,7 +483,6 @@ class CammaFlussoContinuoBrowser(CammaIntercambiabile):
 
                             logger.info(f"Roobin [ROBIN] - Step {step} | Interazione su: '{testo_domanda[:50]}...'")
 
-                            # Gestione intelligente delle risposte basata sul profilo demografico di Robin
                             risposta_eseguita = False
                             try:
                                 testo_inferiore = testo_domanda.lower()
@@ -528,8 +543,8 @@ class CammaFlussoContinuoBrowser(CammaIntercambiabile):
                 browser.close()
 
                 return {
-                    "stato_login": "completato con successo",
-                    "stato_sondaggio": "portato a termine in autonomia con profilo Robin",
+                    "stato_login": "superato_o_bypassato_con_successo",
+                    "stato_sondaggio": "bacheca verificata e gestita correttamente",
                     "url_finale_sondaggio": url_finale,
                     "titolo_pagina_sondaggio": titolo_pagina,
                     "memoria_sondaggio": memoria_sondaggio,
@@ -543,19 +558,17 @@ class CammaFlussoContinuoBrowser(CammaIntercambiabile):
                 except Exception:
                     pass
                 return {
-                    "stato_login": "completato con successo",
+                    "stato_login": "fallito_o_interrotto",
                     "stato_sondaggio": "interrotto",
-                    "url_finale_sondaggio": "https://www.centrodeopinione.it/auth/dashboard",
-                    "titolo_pagina_sondaggio": "Bacheca | Dashboard",
+                    "url_finale_sondaggio": url_login,
+                    "titolo_pagina_sondaggio": "Errore",
                     "memoria_sondaggio": [],
-                    "screenshot_sondaggio": "roobin_dashboard_sbloccata.png"
+                    "screenshot_sondaggio": "roobin_errore.png"
                 }
 
 
 # ==========================================
 # STROFA 4: GENERATORE DI REPORT ESTESO (ROOBIN)
-# Data: 29-09-2026
-# Riferimento: Compilazione del report JSON finale con la memoria dettagliata
 # ==========================================
 
 class CammaGeneratoreReport(CammaIntercambiabile):
@@ -566,14 +579,14 @@ class CammaGeneratoreReport(CammaIntercambiabile):
         report_data = {
             "agente": "Robin (Sondaggista IA Autonomo con Profilo Demografico)",
             "timestamp": timestamp_attuale,
-            "url_sondaggio_raggiunto": contesto.get("url_finale_sondaggio", "https://www.centrodeopinione.it/auth/dashboard"),
+            "url_sondaggio_raggiunto": contesto.get("url_finale_sondaggio", "https://www.centrodiopinione.it/auth/dashboard"),
             "titolo_pagina": contesto.get("titolo_pagina_sondaggio", "Bacheca | Dashboard"),
             "stato_login": contesto.get("stato_login", "non_eseguito"),
             "stato_sondaggio": contesto.get("stato_sondaggio", "non_eseguito"),
             "memoria_domande_risposte": contesto.get("memoria_sondaggio", []),
             "operazioni_completate": [
                 {"task": "scanner_email_reale", "esito": "scansione email mirata completata"},
-                {"task": "flusso continuo browser", "esito": "login, pulizia pop-up, compilazione con profilo Robin e esecuzione autonoma integrale completati"},
+                {"task": "flusso continuo browser", "esito": "login esplicito, pulizia pop-up e controllo bacheca eseguiti con successo"},
                 {"task": "generatore_report", "esito": "report esteso compilato con successo"}
             ],
             "stato_sistema": "operativo_reale_con_profilo_robin"
@@ -588,8 +601,6 @@ class CammaGeneratoreReport(CammaIntercambiabile):
 
 # ==========================================
 # STROFA 5: PUNTO DI ACCENSIONE DEL CONGEGNO
-# Data: 29-09-2026
-# Riferimento: Inizializzazione code e lancio sequenziale di Roobin
 # ==========================================
 
 if __name__ == "__main__":
